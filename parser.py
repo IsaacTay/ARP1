@@ -11,5 +11,5 @@ def get_data(filename):
             if first:
                 first = False
                 continue
-            data = (row[0], np.Array(data[1:]).reshape(28, 28))
+            data.append((row[0], np.array(row[1:]).reshape(28, 28)))
         return data
