@@ -12,7 +12,7 @@ import parser
 
 model = Model()
 
-optimizer = optim.Adam(model.parameters(), eps=10**-6)
+optimizer = optim.Adam(model.parameters(), eps=10**-4)
 
 save_file = "saves/model.state"
 if os.path.isfile(save_file):
@@ -31,16 +31,16 @@ def train():
     if len(test_accuracy) > 0:
         prev_accuracy = test_accuracy[-1] * 100
     for i in range(1):
-        sub_data = train_data[np.random.randint(0, len(train_data), 160)]
+        sub_data = train_data[np.random.randint(0, len(train_data), 16)]
         data, target = np.stack(sub_data[:, 1]), np.array(sub_data[:, 0], dtype=np.int32)
         data = np.expand_dims(data, axis=1)
         data, target = Variable(torch.Tensor(data)), Variable(torch.LongTensor(target))
         optimizer.zero_grad()
         output = model(data)
         loss = F.nll_loss(output, target)
+        print("{} - {}: {}%".format(len(test_accuracy), loss.data[0], prev_accuracy), end='\r')
         loss.backward()
         optimizer.step()
-        print("{} - {}: {}%".format(len(test_accuracy), i/100, prev_accuracy), end='\r')
 
 def test():
     global test_accuracy
