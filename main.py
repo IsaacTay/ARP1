@@ -12,7 +12,7 @@ import parser
 
 model = Model()
 
-optimizer = optim.Adam(model.parameters())
+optimizer = optim.Adam(model.parameters(), eps=10**-6)
 
 save_file = "saves/model.state"
 if os.path.isfile(save_file):
